@@ -2,9 +2,11 @@
 FROM quay.io/fedora/fedora-silverblue:41
 # Enable cliwrap.
 RUN rpm-ostree cliwrap install-to-root /
-RUN curl https://copr.fedorainfracloud.org/coprs/kwizart/kernel-longterm-6.6/repo/fedora-41/kwizart-kernel-longterm-6.6-fedora-41.repo > /etc/yum.repos.d/kwizart-kernel-longterm-6.6-fedora-41.repo
 # Replace the kernel, kernel-core, kernel-modules-core and kernel-modules packages.
 RUN rpm-ostree override remove kernel kernel-{core,modules,modules-extra} \
-    --install kernel-longterm --install kernel-longterm-core \
-    --install kernel-longterm-modules --install kernel-longterm-modules-extra && \
+    --install https://kojipkgs.fedoraproject.org//packages/kernel/6.10.14/200.fc40/x86_64/kernel-6.10.14-200.fc40.x86_64.rpm \
+    --install https://kojipkgs.fedoraproject.org//packages/kernel/6.10.14/200.fc40/x86_64/kernel-core-6.10.14-200.fc40.x86_64.rpm \
+    --install https://kojipkgs.fedoraproject.org//packages/kernel/6.10.14/200.fc40/x86_64/kernel-modules-6.10.14-200.fc40.x86_64.rpm \
+    --install https://kojipkgs.fedoraproject.org//packages/kernel/6.10.14/200.fc40/x86_64/kernel-modules-extra-6.10.14-200.fc40.x86_64.rpm \
+    --install https://kojipkgs.fedoraproject.org//packages/kernel/6.10.14/200.fc40/x86_64/kernel-devel-6.10.14-200.fc40.x86_64.rpm && \
     ostree container commit
