@@ -1,4 +1,4 @@
-name: Build Fedora Silverblue Image
+name: Build Nvidia Variant Image
 
 on:
   push:
