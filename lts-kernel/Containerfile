@@ -7,8 +7,6 @@ RUN curl https://kojipkgs.fedoraproject.org/packages/kernel/6.10.14/200.fc40/x86
     curl https://kojipkgs.fedoraproject.org/packages/kernel/6.10.14/200.fc40/x86_64/kernel-modules-extra-6.10.14-200.fc40.x86_64.rpm && \
     curl https://kojipkgs.fedoraproject.org/packages/kernel/6.10.14/200.fc40/x86_64/kernel-devel-6.10.14-200.fc40.x86_64.rpm
 
-# Enable cliwrap.
-RUN rpm-ostree cliwrap install-to-root /
 # Replace the kernel, kernel-core, kernel-modules-core and kernel-modules packages.
 RUN rpm-ostree override remove kernel kernel-{core,modules,modules-extra} \
     --install kernel-6.10.14-200.fc40.x86_64.rpm \
