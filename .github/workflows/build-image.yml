@@ -28,6 +28,14 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install podman
 
+      - name: Cache Podman image layers
+        uses: actions/cache@v3
+        with:
+          path: /var/lib/containers/storage
+          key: ${{ runner.os }}-podman-layers-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-podman-layers-
+
       - name: Find and build Containerfiles
         run: |
           find . -name 'Containerfile' | while read containerfile; do
