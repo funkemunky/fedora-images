@@ -15,3 +15,16 @@ https://kojipkgs.fedoraproject.org/packages/kernel/6.10.14/200.fc40/x86_64/kerne
 https://kojipkgs.fedoraproject.org/packages/kernel/6.10.14/200.fc40/x86_64/kernel-modules-core-6.10.14-200.fc40.x86_64.rpm \
 https://kojipkgs.fedoraproject.org/packages/kernel/6.10.14/200.fc40/x86_64/kernel-devel-6.10.14-200.fc40.x86_64.rpm && \
 ostree container commit
+
+# Installing RPM-Fusion Repositories
+RUN rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && ostree container commit
+
+# Installing RPM-Fusion Media-Codecs
+RUN rpm-ostree override remove mesa-va-drivers --install mesa-va-drivers-freeworld --install mesa-vdpau-drivers-freeworld && \
+rpm-ostree install gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi && \
+ostree container commit
+
+# Installing non-fre FFMPEG
+RUN rpm-ostree override remove ffmpeg-free libavdevice-free libavcodec-free libavfilter-free libavformat-free libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg && \
+ostree container commit
