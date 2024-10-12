@@ -16,24 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Cache APT packages
-        uses: actions/cache@v3
-        with:
-          path: /var/cache/apt
-          key: ${{ runner.os }}-apt-cache
-
       - name: Install Podman
         run: |
           sudo apt-get update
           sudo apt-get -y install podman
-
-      - name: Cache Podman image layers
-        uses: actions/cache@v3
-        with:
-          path: /var/lib/containers/storage
-          key: ${{ runner.os }}-podman-layers
-          restore-keys: |
-            ${{ runner.os }}-podman-layers
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
