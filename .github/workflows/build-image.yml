@@ -16,14 +16,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Cache Podman installation
+      - name: Cache APT packages
         uses: actions/cache@v3
         with:
-          path: /usr/local/bin/podman
-          key: ${{ runner.os }}-podman
+          path: /var/cache/apt
+          key: ${{ runner.os }}-apt-cache
 
       - name: Install Podman
-        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get -y install podman
@@ -32,9 +31,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /var/lib/containers/storage
-          key: ${{ runner.os }}-podman-layers-${{ github.sha }}
+          key: ${{ runner.os }}-podman-layers
           restore-keys: |
-            ${{ runner.os }}-podman-layers-
+            ${{ runner.os }}-podman-layers
 
       - name: Find and build Containerfiles
         run: |
