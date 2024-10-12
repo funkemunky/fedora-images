@@ -6,4 +6,4 @@ RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install kernel akmod-nvid
  ostree container commit
 
 # Add the modprobe config file
-COPY ./nvidia.conf /etc/modprobe.d/nvidia.conf
+RUN wget -O /etc/modprobe.d/nvidia.conf https://raw.githubusercontent.com/funkemunky/fedora-images/refs/heads/main/fedora-silverblue-nvidia/nvidia.conf
