@@ -2,6 +2,7 @@
 FROM quay.io/fedora/fedora-silverblue:41
 # Enable cliwrap.
 RUN rpm-ostree cliwrap install-to-root /
+RUN curl https://copr.fedorainfracloud.org/coprs/kwizart/kernel-longterm-6.6/repo/fedora-41/kwizart-kernel-longterm-6.6-fedora-41.repo > /etc/yum.repos.d/kwizart-kernel-longterm-6.6-fedora-41.repo
 # Replace the kernel, kernel-core, kernel-modules-core and kernel-modules packages.
 RUN rpm-ostree override remove kernel kernel-{core,modules,modules-extra} \
     --install kernel-longterm --install kernel-longterm-core \

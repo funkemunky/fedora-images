@@ -16,29 +16,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Cache Podman installation
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/podman
+          key: ${{ runner.os }}-podman
+
       - name: Install Podman
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get -y install podman
 
-      - name: Build and push Podman image
-        run: |
-          podman build -t ghcr.io/${{ github.repository }}/fedora-silverblue:latest ./lts-kernel
-          echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          podman push ghcr.io/${{ github.repository }}/fedora-silverblue:latest
+      - name: Cache Podman installation
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/podman
+          key: ${{ runner.os }}-podman
 
-      - name: Update package ID
+      - name: Install Podman
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          PACKAGE_ID=$(podman run --rm ghcr.io/${{ github.repository }}/fedora-silverblue:latest rpm -q kernel-longterm)
-          echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
-
-      - name: Commit updated package ID
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          echo "Package ID: $PACKAGE_ID" > package_id.txt
-          git add package_id.txt
-          git commit -m "Update package ID"
-          git push origin main
-        env:
-          PACKAGE_ID: ${{ env.PACKAGE_ID }}
+          sudo apt-get update
+          sudo apt-get -y install podman
