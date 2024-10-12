@@ -25,7 +25,7 @@ jobs:
       - name: Install Podman
         run: |
           sudo apt-get update
-          sudo apt-get -y install podman podman-docker
+          sudo apt-get -y install podman
 
       - name: Cache Podman image layers
         uses: actions/cache@v3
