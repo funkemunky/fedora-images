@@ -51,7 +51,7 @@ jobs:
           context: .
           file: fedora-silverblue/Containerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/${{ env.PACKAGE_NAME }}:41
+          tags: ghcr.io/${{ github.repository }}/fedora-silverblue:41
 
       - name: Build and push fedora-silverblue-nvidia variant
         uses: docker/build-push-action@v4
@@ -59,4 +59,4 @@ jobs:
           context: .
           file: fedora-silverblue-nvidia/Containerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/${{ env.PACKAGE_NAME }}:41
+          tags: ghcr.io/${{ github.repository }}/fedora-silverblue-nvidia:41
