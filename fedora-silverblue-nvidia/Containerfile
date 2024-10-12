@@ -1,10 +1,9 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM localhost/fedora-silverblue:41
-
-# Enable cliwrap.
-RUN rpm-ostree cliwrap install-to-root /
+FROM fedora-silverblue:41
 
 # Install the NVIDIA driver.
-RUN rpm-ostree install akmod-nvidia xorg-x11-drv-nvidia-cuda && \
- rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau --append=nvidia-drm.modeset=1 && \
+RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install kernel akmod-nvidia xorg-x11-drv-nvidia-cuda && \
  ostree container commit
+
+# Add the modprobe config file
+COPY nvidia.conf /etc/modprobe.d/nvidia.conf
