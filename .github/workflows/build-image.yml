@@ -35,15 +35,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-podman-layers
 
-
-      - name: Find and build Containerfiles
-        run: |
-          find . -name 'Containerfile' | while read containerfile; do
-            dir=$(dirname "$containerfile")
-            package_name=$(basename "$dir")
-            echo "PACKAGE_NAME=$package_name" >> $GITHUB_ENV
-          done
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -54,26 +45,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker images
+      - name: Build and push fedora-silverblue
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ${{ env.PACKAGE_NAME }}/Containerfile
+          file: fedora-silverblue/Containerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/${{ env.PACKAGE_NAME }}:latest
+          tags: ghcr.io/${{ github.repository }}/${{ env.PACKAGE_NAME }}:41
 
-      - name: Get package ID
-        run: |
-          PACKAGE_ID=$(podman run --rm ghcr.io/${{ github.repository }}/${{ env.PACKAGE_NAME }}:latest rpm -q kernel-longterm)
-          echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
-          echo "Package ID: $PACKAGE_ID" > ${{ env.PACKAGE_NAME }}/package_id.txt
-          git add ${{ env.PACKAGE_NAME }}/package_id.txt
-
-      - name: Commit updated package IDs
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "Update package IDs"
-          git push origin main
-        env:
-          PACKAGE_ID: ${{ env.PACKAGE_ID }}
+      - name: Build and push fedora-silverblue-nvidia variant
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: fedora-silverblue-nvidia/Containerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}/${{ env.PACKAGE_NAME }}:41
