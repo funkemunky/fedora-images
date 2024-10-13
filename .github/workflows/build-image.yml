@@ -12,7 +12,7 @@ on:
 
 jobs:
   build-silverblue:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -38,7 +38,7 @@ jobs:
             ghcr.io/${{ github.repository }}/fedora-silverblue:41
             ghcr.io/${{ github.repository }}/fedora-silverblue:latest
   build-kinoite:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -64,7 +64,7 @@ jobs:
             ghcr.io/${{ github.repository }}/fedora-kinoite:40
             ghcr.io/${{ github.repository }}/fedora-kinoite:latest
   build-silverblue-nvidia:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-silverblue
 
     steps:
@@ -91,7 +91,7 @@ jobs:
             ghcr.io/${{ github.repository }}/fedora-silverblue:41-nvidia
             ghcr.io/${{ github.repository }}/fedora-silverblue:latest-nvidia
   build-kinoite-nvidia:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-kinoite
 
     steps:
