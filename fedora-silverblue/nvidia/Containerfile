@@ -9,5 +9,10 @@ RUN rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm
 
 
 # Add the modprobe config file
-RUN wget -O /etc/modprobe.d/nvidia.conf https://raw.githubusercontent.com/funkemunky/fedora-images/refs/heads/main/fedora-silverblue-nvidia/nvidia.conf && \
- ostree container commit
+RUN echo "blacklist nouveau\n\
+          options nvidia-drm modeset=1\n\
+          \n\
+          # Enable DynamicPowerManagement\n\
+          # http://download.nvidia.com/XFree86/Linux-x86_64/440.31/README/dynamicpowermanagement.html\n\
+          options nvidia NVreg_DynamicPowerManagement=0x03" > /etc/modprobe.d/nvidia.conf && \
+          ostree container commit
