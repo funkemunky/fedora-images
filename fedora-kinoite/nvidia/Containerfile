@@ -1,15 +1,10 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM ghcr.io/funkemunky/fedora-images/fedora-kinoite:40
+FROM localhost/fedora-kinoite:40
 
 # Install the NVIDIA driver.
 RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install kernel akmod-nvidia xorg-x11-drv-nvidia-cuda && \
  ostree container commit
 
 # Add the modprobe config file
-RUN echo "blacklist nouveau\n\
-          options nvidia-drm modeset=1\n\
-          \n\
-          # Enable DynamicPowerManagement\n\
-          # http://download.nvidia.com/XFree86/Linux-x86_64/440.31/README/dynamicpowermanagement.html\n\
-          options nvidia NVreg_DynamicPowerManagement=0x03" > /etc/modprobe.d/nvidia.conf && \
+RUN rm /etc/modprobe.d/nvidia.conf && curl https://pastebin.com/raw/9gsw3HRT > /etc/modprobe.d/nvidia.conf && \
           ostree container commit
