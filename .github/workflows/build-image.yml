@@ -37,7 +37,33 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}/fedora-silverblue:41
             ghcr.io/${{ github.repository }}/fedora-silverblue:latest
-  build-nvidia:
+  build-kinoite:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push fedora-silverblue
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: fedora-kinoite/Containerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/fedora-kinoite:40
+            ghcr.io/${{ github.repository }}/fedora-kinoite:latest
+  build-silverblue-nvidia:
     runs-on: ubuntu-latest
     needs: build-silverblue
 
@@ -59,8 +85,35 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: fedora-silverblue-nvidia/Containerfile
+          file: fedora-silverblue/nvidia/Containerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/fedora-silverblue-nvidia:41
-            ghcr.io/${{ github.repository }}/fedora-silverblue-nvidia:latest
+            ghcr.io/${{ github.repository }}/fedora-silverblue:41-nvidia
+            ghcr.io/${{ github.repository }}/fedora-silverblue:latest-nvidia
+  build-kinoite-nvidia:
+    runs-on: ubuntu-latest
+    needs: build-kinoite
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push fedora-silverblue-nvidia variant
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: fedora-kinoite/nvidia/Containerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/fedora-kinoite:40-nvidia
+            ghcr.io/${{ github.repository }}/fedora-kinoite:latest-nvidia
