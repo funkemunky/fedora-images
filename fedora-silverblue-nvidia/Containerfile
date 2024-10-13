@@ -2,8 +2,11 @@
 FROM ghcr.io/funkemunky/fedora-images/fedora-silverblue:41
 
 # Install the NVIDIA driver.
-RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install kernel akmod-nvidia xorg-x11-drv-nvidia-cuda && \
- ostree container commit
+COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:main-40 /rpms/ /tmp/rpms
+RUN find /tmp/rpms
+RUN rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm
+RUN rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm
+
 
 # Add the modprobe config file
 RUN wget -O /etc/modprobe.d/nvidia.conf https://raw.githubusercontent.com/funkemunky/fedora-images/refs/heads/main/fedora-silverblue-nvidia/nvidia.conf && \
