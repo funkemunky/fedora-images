@@ -65,7 +65,6 @@ jobs:
             ghcr.io/${{ github.repository }}/fedora-kinoite:latest
   build-silverblue-nvidia:
     runs-on: self-hosted
-    needs: build-silverblue
 
     steps:
       - name: Checkout repository

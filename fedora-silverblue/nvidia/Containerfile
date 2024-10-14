@@ -1,8 +1,18 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM ghcr.io/funkemunky/fedora-images/fedora-silverblue:41
+FROM nexus.funkemunky.cc/fedora/fedora-silverblue:41
 
-RUN rpm-ostree cliwrap install-to-root / && \
-rpm-ostree override replace https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-6.10.12-200.fc40.x86_64.rpm \
+# Install the new kernel.
+RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
+ostree container commit && \
+rpm-ostree install gnome-tweaks distrobox nextcloud-client && rpm-ostree override remove mesa-va-drivers --install mesa-va-drivers-freeworld --install mesa-vdpau-drivers-freeworld && \
+rpm-ostree install gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi && \
+rpm-ostree override remove ffmpeg-free libavdevice-free libavcodec-free libavfilter-free libavformat-free libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg && \
+ostree container commit
+
+
+# Install the new kernel.
+RUN rpm-ostree override replace https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-6.10.12-200.fc40.x86_64.rpm \
 https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-core-6.10.12-200.fc40.x86_64.rpm \
 https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-modules-6.10.12-200.fc40.x86_64.rpm \
 https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-modules-extra-6.10.12-200.fc40.x86_64.rpm \
