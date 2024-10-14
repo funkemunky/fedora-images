@@ -1,0 +1,14 @@
+# This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
+FROM ghcr.io/funkemunky/fedora-images/fedora-silverblue:41
+
+# Install the new kernel.
+RUN rpm-ostree cliwrap install-to-root / && \
+rpm-ostree override replace https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-6.10.12-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-core-6.10.12-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-modules-6.10.12-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-modules-extra-6.10.12-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-modules-core-6.10.12-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-devel-6.10.12-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel-headers/6.10.3/200.fc40/x86_64/kernel-headers-6.10.3-200.fc40.x86_64.rpm \
+https://kojipkgs.fedoraproject.org/packages/kernel/6.10.12/200.fc40/x86_64/kernel-devel-matched-6.10.12-200.fc40.x86_64.rpm && \
+ostree container commit
