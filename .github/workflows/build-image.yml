@@ -54,7 +54,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push fedora-silverblue
+      - name: Build and push fedora-kinoite
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -106,6 +106,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build and push fedora-silverblue-6.10 variant
       - name: Build and push fedora-silverblue-6.10 variant
         uses: docker/build-push-action@v4
         with:
