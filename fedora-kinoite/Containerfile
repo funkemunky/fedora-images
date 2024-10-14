@@ -21,4 +21,4 @@ libpostproc-free libswresample-free libswscale-free --install ffmpeg && \
 ostree container commit
 
 # Installing various tools and apps
-RUN rpm-ostree install distrobox
+RUN rpm-ostree install distrobox nextcloud-client
