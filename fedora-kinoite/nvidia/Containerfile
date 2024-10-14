@@ -1,5 +1,5 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM localhost/fedora-kinoite:40
+FROM ghcr.io/funkemunky/fedora-images/fedora-kinoite:40
 
 # Install the NVIDIA driver.
 RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install kernel akmod-nvidia xorg-x11-drv-nvidia-cuda && \
