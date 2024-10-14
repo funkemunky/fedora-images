@@ -84,7 +84,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: fedora-silverblue/custom-kernel/Containerfile
+          file: fedora-silverblue/nvidia/Containerfile
           push: true
           tags: |
             ghcr.io/${{ github.repository }}/fedora-silverblue:41-nvidia
