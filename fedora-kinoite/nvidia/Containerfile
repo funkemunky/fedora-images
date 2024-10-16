@@ -17,5 +17,3 @@ libpostproc-free libswresample-free libswscale-free --install ffmpeg && \
 rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm && \
 rpm-ostree install distrobox nextcloud-client && rm /usr/share/applications/com.nextcloud.desktopclient.nextcloud.desktop && \
 curl https://pastebin.com/raw/9gsw3HRT > /etc/modprobe.d/nvidia.conf && ostree container commit
-
-RUN curl https://pastebin.com/raw/9gsw3HRT > /etc/modprobe.d/nvidia.conf && ostree container commit
