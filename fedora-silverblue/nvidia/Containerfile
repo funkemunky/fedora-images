@@ -1,9 +1,12 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM ghcr.io/funkemunky/fedora-images/fedora-silverblue:latest-6.10
+FROM ghcr.io/funkemunky/fedora-images/fedora-silverblue:latest
 
 # Install the NVIDIA driver.
-COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:main-40 /rpms/ /tmp/rpms
+# Install the NVIDIA driver.
+COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:main-41 /rpms/ /tmp/rpms
+
 RUN find /tmp/rpms && \
-rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm && \
+rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && \
+rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm && \
 curl https://pastebin.com/raw/9gsw3HRT > /etc/modprobe.d/nvidia.conf && \
-          ostree container commit
+ostree container commit
