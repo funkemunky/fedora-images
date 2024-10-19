@@ -2,9 +2,10 @@
 FROM ghcr.io/funkemunky/fedora-images/fedora-kinoite:40
 
 # Install the NVIDIA driver.
-COPY --from=ghcr.io/ublue-os/akmods-nvidia:main-40 /rpms/ /tmp/rpms
-COPY --from=ghcr.io/ublue-os/akmods:main-40 /rpms/ /tmp/rpms
+COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:main-40-6.11.3-200.fc40.x86_64 /rpms/ /tmp/rpms
+
 RUN find /tmp/rpms && \
-rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm /tmp/rpms/ublue-os/ublue-os-akmods*.rpm && rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm /tmp/rpms/kmods/kmod-openrazer*.rpm && \
+rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && \
+rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm && \
 curl https://pastebin.com/raw/9gsw3HRT > /etc/modprobe.d/nvidia.conf && \
-          ostree container commit
+ostree container commit
