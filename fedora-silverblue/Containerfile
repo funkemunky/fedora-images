@@ -1,11 +1,12 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM quay.io/fedora-ostree-desktops/silverblue:41
+FROM quay.io/fedora-ostree-desktops/silverblue:41.20241027.0.ceab3e17
 
 # Install the new kernel.
-RUN rpm-ostree cliwrap install-to-root / && rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-ostree container commit && \
-rpm-ostree install gnome-tweaks distrobox nextcloud-client && rpm-ostree override remove mesa-va-drivers fedora-bookmarks --install mesa-va-drivers-freeworld --install mesa-vdpau-drivers-freeworld && \
+RUN rpm-ostree cliwrap install-to-root / && \
+rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+RUN  rpm-ostree install gnome-tweaks distrobox nextcloud-client && rpm-ostree override remove mesa-va-drivers fedora-bookmarks --install mesa-va-drivers-freeworld --install mesa-vdpau-drivers-freeworld && \
 rpm-ostree install gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi && \
 rpm-ostree override remove ffmpeg-free libavdevice-free libavcodec-free libavfilter-free libavformat-free libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg && \
 ostree container commit
