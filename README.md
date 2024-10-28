@@ -3,14 +3,14 @@ to my specific preferences and needs on my Lenovo Legion Slim 5 14" AMD 7840hs w
 
 ### Fedora Silverblue 41 or Nvidia Variant
 ```bash
-rpm-ostree rebase ostree-unverified-registry://ghcr.io/funkemunky/fedora-silverblue:41
-rpm-ostree rebase ostree-unverified-registry://ghcr.io/funkemunky/fedora-silverblue:41-nvidia
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/funkemunky/fedora-silverblue:41
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/funkemunky/fedora-silverblue:41-nvidia
 ```
 
 ### Fedora Kinoite 40 or Nvidia Variant
 ```bash
-rpm-ostree rebase ostree-unverified-registry://ghcr.io/funkemunky/fedora-kinoite:40
-rpm-ostree rebase ostree-unverified-registry://ghcr.io/funkemunky/fedora-kinoite:40-nvidia
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/funkemunky/fedora-kinoite:40
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/funkemunky/fedora-kinoite:40-nvidia
 ```
 
 ### Credits and Attributions
