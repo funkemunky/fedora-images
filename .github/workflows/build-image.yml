@@ -1,4 +1,4 @@
-name: Build Fedora Silverblue Image
+name: Build Fedora Image Variants
 
 on:
   schedule:
