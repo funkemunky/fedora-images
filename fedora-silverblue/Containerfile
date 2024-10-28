@@ -1,5 +1,5 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM quay.io/fedora-ostree-desktops/silverblue:41.20241027.0.ceab3e17
+FROM quay.io/fedora-ostree-desktops/silverblue:41
 
 # Installing RPM-Fusion Repositories
 RUN rpm-ostree cliwrap install-to-root / && \
