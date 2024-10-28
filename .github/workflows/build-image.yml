@@ -3,6 +3,7 @@ name: Build Fedora Silverblue Image
 on:
   schedule:
     - cron: '10 3 * * *' # 2:00 AM EST (7:00 AM UTC)
+  workflow_dispatch:
 
 jobs:
   build-silverblue:
