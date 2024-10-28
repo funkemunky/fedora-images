@@ -1,12 +1,15 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
 FROM quay.io/fedora-ostree-desktops/silverblue:41
 
-# Install the new kernel.
+# Installing RPM-Fusion Repositories
 RUN rpm-ostree cliwrap install-to-root / && \
 rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
+curl -L https://pastebin.com/raw/32LNF8LU -o /etc/yum.repos.d/quantt-libfprint-tod-fedora-40.repo && \
+wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/
 
-RUN rpm-ostree override remove mesa-va-drivers fedora-bookmarks --install mesa-va-drivers-freeworld \
+RUN rpm-ostree override remove mesa-va-drivers libfprint fedora-bookmarks --install mesa-va-drivers-freeworld \
+--install mesa-va-drivers-freeworld --install libfprint-tod --install libfprint-2-tod1-elan-0c4b \
 --install mesa-vdpau-drivers-freeworld && \
 rpm-ostree install gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly \
 gstreamer1-vaapi && \
