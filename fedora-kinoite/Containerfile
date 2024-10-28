@@ -8,12 +8,16 @@ https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E 
 wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/
 
-COPY openrazer/*.rpm /tmp/rpms/
+COPY --from=ghcr.io/ublue-os/akmods:main-40 /rpms/ /tmp/rpms
+RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-akmods*.rpm && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
 
-RUN find /tmp/rpms/ && rpm-ostree install /tmp/rpms/*.rpm && rpm-ostree override remove mesa-va-drivers fedora-bookmarks libfprint \
---install mesa-va-drivers-freeworld --install libfprint-tod --install libfprint-2-tod1-elan-0c4b --install mesa-vdpau-drivers-freeworld && \
-rpm-ostree install gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly \
-gstreamer1-vaapi && rpm-ostree override remove ffmpeg-free libavdevice-free libavcodec-free libavfilter-free libavformat-free \
+RUN rpm-ostree override remove mesa-va-drivers fedora-bookmarks libfprint \
+--install mesa-va-drivers-freeworld --install libfprint-tod --install libfprint-2-tod1-elan-0c4b \
+--install mesa-vdpau-drivers-freeworld && \
+rpm-ostree install gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras \
+gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly \
+gstreamer1-vaapi && rpm-ostree override remove ffmpeg-free libavdevice-free libavcodec-free \
+libavfilter-free libavformat-free \
 libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg && \
-rpm-ostree install distrobox nextcloud-client && rm /usr/share/applications/com.nextcloud.desktopclient.nextcloud.desktop && \
+rpm-ostree install distrobox nextcloud-client && rm /usr/share/applications/com.nextcloud*.desktop && \
 ostree container commit
