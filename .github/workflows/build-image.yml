@@ -1,12 +1,6 @@
 name: Build Fedora Silverblue Image
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   schedule:
     - cron: '10 3 * * *' # 2:00 AM EST (7:00 AM UTC)
 
