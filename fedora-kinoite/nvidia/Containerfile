@@ -1,9 +1,13 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM ghcr.io/funkemunky/fedora-images/fedora-kinoite:40
+FROM ghcr.io/ublue-os/kinoite-nvidia:41
 
-# Install the NVIDIA driver.
-COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:main-40 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && curl -L https://negativo17.org/repos/fedora-nvidia.repo -o /etc/yum.repos.d/fedora-nvidia.repo && \
-rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install /tmp/rpms/kmods/kmod-nvidia*.rpm && rpm-ostree install nvidia-settings nvidia-persistenced && \
-curl https://pastebin.com/raw/9gsw3HRT > /etc/modprobe.d/nvidia.conf && \
+# Installing RPM-Fusion Repositories
+RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
+wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/
+
+COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
+RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
+
+RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant && \
+rm /usr/share/applications/com.nextcloud*.desktop && \
 ostree container commit

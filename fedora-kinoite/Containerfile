@@ -1,25 +1,12 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM quay.io/fedora-ostree-desktops/kinoite:40
+FROM ghcr.io/ublue-os/kinoite-main:41
 
 # Installing RPM-Fusion Repositories
-RUN rpm-ostree cliwrap install-to-root / && \
-rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
+RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/
 
-RUN rpm-ostree override remove mesa-va-drivers fedora-bookmarks libfprint \
---install mesa-va-drivers-freeworld --install libfprint-tod --install libfprint-2-tod1-elan-0c4b \
---install mesa-vdpau-drivers-freeworld && \
-rpm-ostree install gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras \
-gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly \
-gstreamer1-vaapi && rpm-ostree override remove ffmpeg-free libavdevice-free libavcodec-free \
-libavfilter-free libavformat-free \
-libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg
-
-COPY --from=ghcr.io/ublue-os/akmods:main-40 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-akmods*.rpm && \
-rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
+COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
+RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
 
 RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant && \
 rm /usr/share/applications/com.nextcloud*.desktop && \
