@@ -8,6 +8,8 @@ wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/re
 COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
 RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
 
+RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
+
 RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant && \
 rm /usr/share/applications/com.nextcloud*.desktop && \
 ostree container commit
