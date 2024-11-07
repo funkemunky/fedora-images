@@ -1,4 +1,4 @@
-name: Build Fedora Image Variants
+name: Build Kinoite
 
 on:
   workflow_dispatch:
