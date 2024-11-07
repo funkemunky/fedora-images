@@ -1,13 +1,14 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM ghcr.io/ublue-os/kinoite-main:41
+ARG BASE_IMAGE_VERSION
+ARG IMAGE_VARIANT
+FROM ghcr.io/ublue-os/kinoite-${IMAGE_VARIANT}:${BASE_IMAGE_VERSION}
 
 # Installing RPM-Fusion Repositories
-RUN rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-    wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
-    wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/
+RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
+wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/
+&& mkdir /usr/share/polkit-1/actions && wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
-COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
+COPY --from=ghcr.io/ublue-os/akmods:main-${BASE_IMAGE_VERSION} /rpms/ /tmp/rpms
 RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
 
 RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
