@@ -1,4 +1,4 @@
-name: Build Kinoite New
+name: Build Kinoite cd nv
 
 on:
   workflow_dispatch:
