@@ -2,29 +2,11 @@ name: Build Kinoite
 
 on:
   workflow_dispatch:
-    inputs:
-      base_image_version:
-        description: 'Base image version number'
-        required: true
-        default: '41'
-        type: string
-      image_variant:
-        description: 'Image Variant'
-        required: true
-        default: 'Main'
-        type: string
+
 jobs:
   build-kinoite-nvidia:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        base_image_version:
-          - "41"
-          - "40"
-        image_variant:
-          - "main"
-          - "nvidia"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -43,10 +25,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: fedora-kinoite/Containerfile
+          file: fedora-kinoite/nvidia/Containerfile
           push: true
-          build-args: |
-            BASE_IMAGE_VERSION=${{ matrix.base_image_version }}
-            IMAGE_VARIANT=${{ matrix.image-variant }}
           tags: |
-            ghcr.io/${{ github.repository }}/fedora-kinoite:${{ matrix.base_image_version }}-${{ matrix.image-variant }}
+            ghcr.io/${{ github.repository }}/fedora-kinoite:41-nvidia
+            ghcr.io/${{ github.repository }}/fedora-kinoite:latest-nvidia

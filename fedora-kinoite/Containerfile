@@ -1,7 +1,8 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
 ARG BASE_IMAGE_VERSION="${BASE_IMAGE_VERSION}"
-ARG IMAGE_VARIANT="${IMAGE_VARIANT}"
-FROM ghcr.io/ublue-os/kinoite-${IMAGE_VARIANT}:${BASE_IMAGE_VERSION}
+ARG IMAGE_VARIANT="kinoite-${IMAGE_VARIANT}"
+
+FROM ghcr.io/ublue-os/${IMAGE_VARIANT}:${BASE_IMAGE_VERSION}
 
 # Installing RPM-Fusion Repositories
 RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
