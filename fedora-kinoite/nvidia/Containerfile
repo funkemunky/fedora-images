@@ -4,7 +4,12 @@ FROM ghcr.io/ublue-os/kinoite-nvidia:41
 # Installing RPM-Fusion Repositories
 RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
+wget https://copr.fedorainfracloud.org/coprs/kwizart/kernel-longterm-6.6/repo/fedora-41/kwizart-kernel-longterm-6.6-fedora-41.repo -P /etc/yum.repos.d/ && \
 wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+
+RUN rpm-ostree cliwrap install-to-root / && sudo rpm-ostree override remove kernel kernel-{modules,modules-extra} \
+--install kernel-longterm --install kernel-longterm-core --install kernel-longterm-modules --install kernel-longterm-modules-extra --install kernel-longterm-devel && \
+ostree container commit
 
 COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
 RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
