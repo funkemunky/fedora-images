@@ -29,6 +29,6 @@ RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmo
 
 RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
 
-RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant vlc obs-studio alacritty && \
+RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant vlc obs-studio alacritty nvidia-driver-cuda nvidia-driver && \
 rm /usr/share/applications/com.nextcloud*.desktop && \
 ostree container commit
