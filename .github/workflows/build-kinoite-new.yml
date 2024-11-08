@@ -2,17 +2,7 @@ name: Build Kinoite New
 
 on:
   workflow_dispatch:
-    inputs:
-      base_image_version:
-        description: 'Base image version number'
-        required: true
-        default: '41'
-        type: string
-      image_variant:
-        description: 'Image Variant'
-        required: true
-        default: 'Main'
-        type: string
+
 jobs:
   build-kinoite-nvidia:
     runs-on: ubuntu-latest
