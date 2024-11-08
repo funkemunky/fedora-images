@@ -20,14 +20,14 @@ RUN rpm-ostree cliwrap install-to-root / && \
     ostree container commit
 
 COPY --from=ghcr.io/ublue-os/akmods-nvidia:main-41 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install akmod-nvidia
+RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install akmod-nvidia akmod-openrazer
 
-COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && rpm-ostree install akmod-openrazer
+RUN akmods --force --kernels "6.9.12-200.fc40.x86_64" --kmod "nvidia"
+RUN akmods --force --kernels "6.9.12-200.fc40.x86_64" --kmod "openrazer"
 
-RUN sudo akmods --kernels 6.9.12-200.fc40.x86_64 --force && /usr/libexec/rpm-ostree/wrapped/dracut --no-hostonly --kver 6.9.12-200.fc40.x86_64 --reproducible -v --add ostree
+RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm /var/cache/akmods/nvidia/kmod-nvidia*.rpm
 
-RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b 
+RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
 
 RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant vlc obs-studio alacritty && \
 rm /usr/share/applications/com.nextcloud*.desktop && \
