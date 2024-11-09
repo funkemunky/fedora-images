@@ -6,10 +6,8 @@ RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedor
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
 wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
-RUN find /tmp/rpms && rpm-ostree install akmod-openrazer
-
 #RUN akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "nvidia"
-RUN akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "openrazer"
+RUN rpm-ostree install akmod-openrazer && akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "openrazer"
 
 RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm /var/cache/akmods/nvidia/kmod-nvidia*.rpm
 
