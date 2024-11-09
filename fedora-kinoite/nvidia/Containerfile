@@ -4,8 +4,7 @@ FROM ghcr.io/ublue-os/kinoite-nvidia:41
 # Installing RPM-Fusion Repositories
 RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
-wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy && \
-echo "fuck"
+wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
 RUN rpm-ostree install akmod-openrazer kernel-devel
 
