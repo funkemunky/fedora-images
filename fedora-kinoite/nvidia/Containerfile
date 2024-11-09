@@ -6,12 +6,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedor
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
 wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
-RUN rpm-ostree install akmod-openrazer kernel-devel
-
-RUN akmods --force --kmod "openrazer" --rebuild
-
-RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm
-
 RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
 
 RUN rpm-ostree install nextcloud-client distrobox btrfs-assistant vlc obs-studio alacritty nvidia-driver-cuda nvidia-driver && \
