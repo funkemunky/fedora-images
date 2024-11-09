@@ -6,8 +6,13 @@ RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedor
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
 wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
 
-COPY --from=ghcr.io/ublue-os/akmods:main-41 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/kmods/kmod-openrazer-*.rpm
+COPY --from=ghcr.io/ublue-os/akmods-nvidia:main-41 /rpms/ /tmp/rpms
+RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install akmod-nvidia akmod-openrazer
+
+#RUN akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "nvidia"
+RUN akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "openrazer"
+
+RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm /var/cache/akmods/nvidia/kmod-nvidia*.rpm
 
 RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
 
