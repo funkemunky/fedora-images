@@ -1,31 +1,10 @@
 # This example uses rpm-ostree's cliwrap to allow dracut to run on the container and generate an initramfs.
-FROM ghcr.io/ublue-os/kinoite-main:41
+FROM ghcr.io/ublue-os/kinoite-nvidia:41
 
 # Installing RPM-Fusion Repositories
 RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedora-40/quantt-libfprint-tod-fedora-40.repo -P /etc/yum.repos.d/ && \
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
 wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
-
-RUN rpm-ostree cliwrap install-to-root / && \
-    rpm-ostree override replace https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-core-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-modules-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-modules-extra-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-modules-core-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-modules-internal-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-devel-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-uki-virt-6.9.9-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel-headers/6.9.4/200.fc40/x86_64/kernel-headers-6.9.4-200.fc40.x86_64.rpm \
-    https://kojipkgs.fedoraproject.org/packages/kernel/6.9.9/200.fc40/x86_64/kernel-devel-matched-6.9.9-200.fc40.x86_64.rpm && \
-    ostree container commit
-
-COPY --from=ghcr.io/ublue-os/akmods-nvidia:main-41 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install akmod-nvidia akmod-openrazer
-
-RUN akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "nvidia"
-RUN akmods --force --kernels "6.9.9-200.fc40.x86_64" --kmod "openrazer"
-
-RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm /var/cache/akmods/nvidia/kmod-nvidia*.rpm
 
 RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
 
