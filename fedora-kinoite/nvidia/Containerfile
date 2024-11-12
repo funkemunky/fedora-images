@@ -6,26 +6,18 @@ RUN wget https://copr.fedorainfracloud.org/coprs/quantt/libfprint-tod/repo/fedor
 wget https://copr.fedorainfracloud.org/coprs/spandey-kyriba/Centos7-Openssl11/repo/epel-7/spandey-kyriba-Centos7-Openssl11-epel-7.repo -P /etc/yum.repos.d/ && \
 wget https://copr.fedorainfracloud.org/coprs/lsevcik/akmod-openrazer/repo/fedora-41/lsevcik-akmod-openrazer-fedora-41.repo -P /etc/yum.repos.d/ && \
 wget https://download.opensuse.org/repositories/hardware:/razer/Fedora_Rawhide/hardware:razer.repo -P /etc/yum.repos.d/ && \
-wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
-
-RUN rpm-ostree cliwrap install-to-root /
-
-RUN sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
+wget https://pastebin.com/raw/82905h5H -O /usr/share/polkit-1/actions/com.bitwarden.Bitwarden.policy && \
+sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
 ostree container commit
 
-RUN rpm-ostree override remove mesa-va-drivers --install mesa-va-drivers-freeworld --install mesa-vdpau-drivers-freeworld
-
-RUN rpm-ostree install gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi
-
-RUN rpm-ostree override remove libavcodec-free ffmpeg-free libavdevice-free libavfilter-free libavformat-free libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg
+RUN rpm-ostree override remove mesa-va-drivers --install mesa-va-drivers-freeworld --install mesa-vdpau-drivers-freeworld && \
+rpm-ostree install gstreamer1-plugin-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly gstreamer1-vaapi && \
+rpm-ostree override remove libavcodec-free ffmpeg-free libavdevice-free libavfilter-free libavformat-free libavutil-free libpostproc-free libswresample-free libswscale-free --install ffmpeg
 
 COPY --from=ghcr.io/ublue-os/akmods-nvidia:main-41 /rpms/ /tmp/rpms
-RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install akmod-nvidia akmod-openrazer
-
-# Get installed kernel version and build akmods based on that
-RUN akmods --force --kernels `rpm -q kernel-core --qf "%{version}-%{release}.%{arch}\n"`
-
-RUN find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm /var/cache/akmods/nvidia/kmod-nvidia*.rpm
+RUN find /tmp/rpms && rpm-ostree install /tmp/rpms/ublue-os/ublue-os-nvidia*.rpm && rpm-ostree install akmod-nvidia akmod-openrazer && \
+akmods --force --kernels \`rpm -q kernel-core --qf \"%{version}-%{release}.%{arch}\"\` && \
+find /var/cache/akmods && rpm-ostree install /var/cache/akmods/openrazer/kmod-openrazer*.rpm /var/cache/akmods/nvidia/kmod-nvidia*.rpm
 
 RUN rpm-ostree override remove libfprint fedora-bookmarks --install libfprint-2-tod1-elan-0c4b
 
