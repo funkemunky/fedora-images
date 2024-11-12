@@ -1,11 +1,11 @@
-name: Build Kinoite
+fname: Build Kinoite
 
 on:
   workflow_dispatch:
 
 jobs:
   build-kinoite-nvidia:
-    runs-on: homeserver
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
